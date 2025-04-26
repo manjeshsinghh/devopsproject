@@ -1,29 +1,21 @@
 # Use official PyTorch image with CUDA (GPU support)
 FROM pytorch/pytorch:2.1.0-cuda11.8-cudnn8-runtime
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file and install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Jupyter Notebook
 RUN pip install notebook
 
-# Copy your Jupyter Notebook to the container
 COPY nlp.ipynb .
 
-# Expose Jupyter Notebook port
 EXPOSE 8888
 
-# Default command to run Jupyter Notebook
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
-
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=", "--NotebookApp.password="]

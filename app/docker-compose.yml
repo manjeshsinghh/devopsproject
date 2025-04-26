@@ -1,21 +1,21 @@
-version: '3.8'  # Define the version of Docker Compose
+version: '3.8'
 
 services:
   nlp-app:
-    build: .  # Build from the current directory
-    image: nlp-app:latest  # Name the image nlp-app
-    container_name: nlp-container  # Name the container as nlp-container
+    build: .
+    image: manjeshsinghh/nlp-app:latest
+    container_name: nlp-container
     ports:
-      - "8888:8888"  # Map port 8888 of the container to port 8888 on the host
+      - "8888:8888"
     volumes:
-      - .:/app  # Mount the current directory to /app in the container
+      - .:/app
     environment:
-      - NVIDIA_VISIBLE_DEVICES=all  # Enable GPU if needed, remove this if not using GPU
-    runtime: nvidia  # Use Nvidia runtime for GPU support (remove this if not using GPU)
-    command: ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
+      - NVIDIA_VISIBLE_DEVICES=all
+    runtime: nvidia
+    command: ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=", "--NotebookApp.password="]
     networks:
-      - nlp-network  # Add the container to a custom network
+      - nlp-network
 
 networks:
   nlp-network:
-    driver: bridge  # Use the default bridge driver for networking
+    driver: bridge
