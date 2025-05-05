@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/051821/Recommender-sys.git'
+        REPO_URL = 'https://github.com/manjeshsinghh/devopsproject.git'
         BRANCH = 'main'
     }
 
