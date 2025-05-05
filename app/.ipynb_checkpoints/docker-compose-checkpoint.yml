@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  nlp-app:
+    build: .
+    image: manjeshsinghh/nlp-app:latest
+    container_name: nlp-container
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    runtime: nvidia
+    command: ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=", "--NotebookApp.password="]
+    networks:
+      - nlp-network
+
+networks:
+  nlp-network:
+    driver: bridge
