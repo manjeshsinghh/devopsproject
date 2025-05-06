@@ -16,14 +16,14 @@ pipeline {
 
         stage('Verify Docker Compose File') {
             steps {
-                // Verify presence of Docker-compose.yml
+                
                 bat 'dir C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\pipeline\\app'
             }
         }
 
         stage('Build Docker Images') {
             steps {
-                // Make sure the image name is correctly set in docker-compose.yml
+                
                 bat 'docker-compose -f app/Docker-compose.yml build'
             }
         }
