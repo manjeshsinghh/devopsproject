@@ -2,6 +2,7 @@ pipeline {
     agent any
     
     environment {
+        DOCKER_IMAGE = "manjeshh/nlp-app:latest"
         REPO_URL = 'https://github.com/manjeshsinghh/devopsproject.git'
         BRANCH = 'main'
     }
