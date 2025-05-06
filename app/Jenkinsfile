@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     environment {
         DOCKER_IMAGE = "manjeshh/nlp-app:latest"
         REPO_URL = 'https://github.com/manjeshsinghh/devopsproject.git'
@@ -16,53 +16,49 @@ pipeline {
 
         stage('Verify Docker Compose File') {
             steps {
-                // List contents of the 'app' directory to verify the presence of Docker-compose.yml
-                bat 'dir C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\newproject\\app'
+                // Verify presence of Docker-compose.yml
+                bat 'dir C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\pipeline\\app'
             }
         }
 
         stage('Build Docker Images') {
             steps {
+                // Make sure the image name is correctly set in docker-compose.yml
                 bat 'docker-compose -f app/Docker-compose.yml build'
             }
         }
-        stage('Tag Docker Image') {
-    steps {
-        bat 'docker tag app-nlp-app manjeshh/nlp-app:latest'
-    }
-}
 
         stage('Run Containers') {
             steps {
                 bat 'docker-compose -f app/Docker-compose.yml up -d'
             }
         }
+
         stage('Push to Docker Hub') {
-    steps {
-        script {
-            withCredentials([usernamePassword(
-                credentialsId: 'dockerhub-creds', 
-                usernameVariable: 'DOCKER_USER', 
-                passwordVariable: 'DOCKER_PASS'
-            )]) {
-                bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
-                bat "docker push ${DOCKER_IMAGE}"
-                bat "docker logout"
+            steps {
+                script {
+                    withCredentials([usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )]) {
+                        bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                        bat "docker push ${DOCKER_IMAGE}"
+                        bat "docker logout"
+                    }
+                }
             }
         }
-    }
-}
-stage('Deploy with Docker Compose') {
-     steps {
-script {
-bat "docker-compose down"
-bat "docker-compose pull" bat "docker-compose up -d"
-}
-}
-}
-}
 
-
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    bat "docker-compose -f app/Docker-compose.yml down"
+                    bat "docker-compose -f app/Docker-compose.yml pull"
+                    bat "docker-compose -f app/Docker-compose.yml up -d"
+                }
+            }
+        }
 
         stage('Check Running Containers') {
             steps {
@@ -76,14 +72,14 @@ bat "docker-compose pull" bat "docker-compose up -d"
             echo 'Pipeline finished!'
         }
         success {
-emailext subject: "Jenkins Build Successful",
-body: "Good news! The Jenkins build and deployment were successful.", to: "manjeshsingh0245@gmail.com"
-}
-failure {
-emailext subject: "Jenkins Build Failed",
-body: "Oops! The Jenkins build failed. Check the logs.", to: "manjeshsingh0245@gmail.com"
-}
-}
-
+            emailext subject: "Jenkins Build Successful",
+                     body: "Good news! The Jenkins build and deployment were successful.",
+                     to: "manjeshsingh0245@gmail.com"
+        }
+        failure {
+            emailext subject: "Jenkins Build Failed",
+                     body: "Oops! The Jenkins build failed. Check the logs.",
+                     to: "manjeshsingh0245@gmail.com"
+        }
     }
 }
