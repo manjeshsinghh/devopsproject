@@ -2,6 +2,7 @@ version: '3.8'
 services:
   nlp-app:
     build: .
+    image: manjeshh/nlp-app:latest
     ports:
       - "8888:8888"
     volumes:
