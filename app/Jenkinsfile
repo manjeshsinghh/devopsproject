@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    triggers {
+        cron('H * * *')  
+    }
     environment {
         REPO_URL = 'https://github.com/manjeshsinghh/devopsproject.git'
         BRANCH = 'main'
