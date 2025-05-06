@@ -26,6 +26,11 @@ pipeline {
                 bat 'docker-compose -f app/Docker-compose.yml build'
             }
         }
+        stage('Tag Docker Image') {
+    steps {
+        bat 'docker tag app-nlp-app manjeshh/nlp-app:latest'
+    }
+}
 
         stage('Run Containers') {
             steps {
